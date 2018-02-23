@@ -1,3 +1,6 @@
+#The code that calculate the mutual information between stimulus and firing rate with time shift
+
+
 import matplotlib as mpl
 mpl.use('nbagg')
 from mpl_toolkits.mplot3d import Axes3D
@@ -7,15 +10,15 @@ import numpy as np
 import operator
 import os
 import sys
-sim_time = int(sys.argv[1])
-period = float(sys.argv[2])/1000.0
-nbin = 25
+sim_time = int(sys.argv[1])#second
+period = float(sys.argv[2])/1000.0#second
+nbin = 25#number of bins
 rank = 100
 MI_Limit = 20
 taus = np.linspace(-4,4,161)# Notice period
 pwd = os.getcwd()
 read_stimulus = np.load(pwd+"/input_sequence/stimulus.npy")
-read_stimulus = read_stimulus[-int(sim_time/period):]
+read_stimulus = read_stimulus[-int(sim_time/period):]#Delete the anterior part that is not stable
 stt = read_stimulus
 read_spikes = np.load(pwd+"/spike/spikes.npy")
 tst = np.arange(0,sim_time,period)
@@ -32,7 +35,7 @@ def binning_spike(period,spt):
         bsp[-1] += 1
     nz = max(bsp)+1 #number of most spike + 1
     return bsp, nz
-
+# sort the spike
 def process_spike(read_spikes,rank):
     spike = read_spikes.item()
     num_channel = len(spike)
@@ -54,7 +57,7 @@ def binning(nbin,sim_time,period,stt):
         tss[tsi[p:ii]] = i
         p = ii
     return tss
-
+#Calculate MI
 def MI(pxy):
     px = pxy.sum(axis=1)
     py = pxy.sum(axis=0)
@@ -66,6 +69,7 @@ def MI(pxy):
         for j in range(len(py)):
             if pxy[i][j]>0: mi += pxy[i][j]*np.log2(pxy[i][j]/(px[i]*py[j]))
     return mi
+#Calculate joint distribution
 def mi_kevin(tau,nbin,nz,bsp,period,tss,tst):
     ii = 0
     pxy = np.zeros([nbin,nz])
@@ -82,6 +86,7 @@ channel_we_want ,spikes = process_spike(read_spikes,rank)
 id = 1
 peak = []
 Mutual_Information = {}
+#Calculate the channel with enough spike
 for channel in channel_we_want:
     filename = pwd +"/MI_curve/"+"channel" + str(channel[0]) + ".jpg"
     spike = spikes[channel[0]]
@@ -94,8 +99,8 @@ for channel in channel_we_want:
             SPT.append(time)
     spt = np.array(SPT)
     
-    bsp, nz = binning_spike(period,spt)
-    tss = binning(nbin,sim_time,period,stt)
+    bsp, nz = binning_spike(period,spt)#bin spike
+    tss = binning(nbin,sim_time,period,stt)#bin stimulus
     
     bsp_shuffle = np.random.permutation(bsp)
     mik_shuffle = [mi_kevin(t,nbin,nz,bsp_shuffle,period,tss,tst) for t in taus]
