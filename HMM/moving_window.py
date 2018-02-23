@@ -1,3 +1,5 @@
+#The code that calculate the mutual information between stimulus and firing rate via moving window
+#Moving window can calculate the mutual information with higher resolution 
 import matplotlib as mpl
 mpl.use('nbagg')
 from mpl_toolkits.mplot3d import Axes3D
@@ -8,23 +10,25 @@ import operator
 import os
 import sys
 
-sim_time = int(sys.argv[1])
-period = float(sys.argv[2])/1000.0
+sim_time = int(sys.argv[1])#second
+period = float(sys.argv[2])/1000.0#second
 nbin = 25
 rank = 100
 MI_Limit = 20
-shift = 5
+shift = 5#The shift between two series(stimulus and firing rate)
 forward = int(np.ceil(shift/period))
 backward = int(np.ceil(shift/period))
 taus = np.linspace(-4,4,801)# Notice period
 pwd = os.getcwd()
 read_stimulus = np.load(pwd+"/input_sequence/stimulus.npy")
-read_stimulus = read_stimulus[-int(sim_time/period):]
-stt = read_stimulus[forward:len(read_stimulus)-backward]
+read_stimulus = read_stimulus[-int(sim_time/period):]#Delete the anterior part that is not stable
+stt = read_stimulus[forward:len(read_stimulus)-backward]#Take the part to calculate MI
 
 read_spikes = np.load(pwd+"/spike/spikes.npy")
 tst = np.arange(0,sim_time-2*shift+period,period)
 
+
+# sort the spike
 def process_spike(read_spikes,rank):
     spike = read_spikes.item()
     num_channel = len(spike)
@@ -46,6 +50,7 @@ def binning(nbin,stt):
         tss[tsi[p:ii]] = i
         p = ii
     return tss
+#shift spiking time
 def time_shift(spt,shift,tau,sim_time):
     shift_spt = []
     if tau != 0:
@@ -57,6 +62,8 @@ def time_shift(spt,shift,tau,sim_time):
             if spiking_time >= shift and spiking_time <= (sim_time-shift):
                 shift_spt.append(spiking_time-shift)
     return shift_spt
+
+#Calculate MI
 def MI(pxy):
     px = pxy.sum(axis=1)
     py = pxy.sum(axis=0)
@@ -78,6 +85,8 @@ peak = []
 Mutual_Information = {}
 tss = binning(nbin,stt)
 
+
+#Calculate the channel with enough spike
 for channel in channel_we_want:
     filename = pwd +"/MI_curve/"+"channel" + str(channel[0]) + ".jpg"
     spike = spikes[channel[0]]
