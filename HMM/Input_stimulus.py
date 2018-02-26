@@ -1,3 +1,4 @@
+#Calculate mutual information between input and stimulus
 import matplotlib as mpl
 mpl.use('nbagg')
 from mpl_toolkits.mplot3d import Axes3D
@@ -77,7 +78,8 @@ for i in range(10,21,1):
 		
 			Sp = read_Sp[-int(sim_time/0.001):]
 		
-			Sp = Sp[Forward-time_shift:len(Sp)-Backward-time_shift]
+			Sp = Sp[Forward-time_shift:len(Sp)-Backward-
+			time_shift]
 			shift_Sp = Sp.reshape(-1, 50).mean(axis=1)
 		
 			shift_tss = binning(nbin,shift_Sp)
