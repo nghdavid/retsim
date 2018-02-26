@@ -1,3 +1,4 @@
+#Plot the intensity of SNL_ganglion
 import matplotlib as mpl
 mpl.use('nbagg')
 from mpl_toolkits.mplot3d import Axes3D
