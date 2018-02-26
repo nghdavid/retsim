@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # coding: utf-8
-
+#Control the overall simulation including COREM and NEST
 import nest
 import nest.raster_plot
 import numpy as np
