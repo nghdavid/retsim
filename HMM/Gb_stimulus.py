@@ -1,3 +1,4 @@
+#Calculate the mutual information between stimulus and Gauss_bipolar
 import matplotlib as mpl
 mpl.use('nbagg')
 from mpl_toolkits.mplot3d import Axes3D
