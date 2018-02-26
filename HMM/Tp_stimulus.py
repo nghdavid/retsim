@@ -1,3 +1,5 @@
+#The code that calculate the mutual information between stimulus and tmp_photorecptor
+
 import matplotlib as mpl
 mpl.use('nbagg')
 from mpl_toolkits.mplot3d import Axes3D
