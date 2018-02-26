@@ -1,4 +1,4 @@
-#The code that calculate the mutual information between stimulus and SNL_photorecptor
+#Calculate the mutual information between stimulus and SNL_photorecptor
 
 import matplotlib as mpl
 mpl.use('nbagg')
