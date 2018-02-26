@@ -11,6 +11,7 @@ import sys
 
 
 
+
 def ganglion_plot(num,fig_num):
     name = "SNL_ganglion" + num
     read_file = open("results/"+name,'r')
