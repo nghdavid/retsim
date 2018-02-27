@@ -1,8 +1,9 @@
+#Generate HMM_script
 import matplotlib.pyplot as plt
 import numpy
 import sys
 import os
-
+#Function that generate HMM.py
 def generateScript(root,SimTime,period):
 
     text_file = open(root+"Retina_scripts/HMM_scripts/HMM.py", "w")
@@ -90,11 +91,11 @@ str(period)+
 	
     text_file.close()
 
-
+#Function that generate retina.multimeter()
 def generate_multimeter(name,starttime):
 	script = ""
-	for i in range(10,21):
-		for j in range(10,21):
+	for i in range(15,16):
+		for j in range(17,18):
 			script += "retina.multimeter('temporal','"
 			script += name
 			script += str(i)
